@@ -6,7 +6,9 @@ services:
     volumes:
       - ./config:/config:rw
       - ./input:/input:rw 
-      - ./output:/output:rw 
+      - ./output:/output:rw
+    links:
+      - plex
   beets:
     build: ./src/beets
     restart: always
