@@ -11,6 +11,7 @@ services:
     build: ./src/beets
     restart: always
     volumes:
+      - ./config:/config:rw
       - ./input:/input:rw 
       - ./output/Music:/output:rw 
     links:
