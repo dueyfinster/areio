@@ -1,33 +1,36 @@
 version: '2'
-filebot:
-  image: coppit/filebot
-  restart: always
-  volumes:
-    - ./config:/config:rw
-    - ./input:/input:rw 
-    - ./output:/output:rw 
-beets:
-  build: ./src/beets
-  restart: always
-  volumes:
-    - ./input:/input:rw 
-    - ./output/Music:/output:rw 
-rtorrent:
-    image: diameter/rtorrent-rutorrent:64
+services:
+  filebot:
+    image: coppit/filebot
     restart: always
-    ports:
-      - "8080:80"
-      - "49161:49161"
-      - "49160:49160"
     volumes:
-    - ./config/.rtorrent:/downloads/.rtorrent
-    - ./config/.rutorrent:/downloads/.rutorrent
-    - ./input:/downloads
-plex:
-  image: timhaak/plex
-  restart: always
-  volumes:
-    - ./config:/config:rw
-    - ./output:/data:rw
-  ports:
-    - "32400:32400"
+      - ./config:/config:rw
+      - ./input:/input:rw 
+      - ./output:/output:rw 
+  beets:
+    build: ./src/beets
+    restart: always
+    volumes:
+      - ./input:/input:rw 
+      - ./output/Music:/output:rw 
+    links:
+      - plex
+  rtorrent:
+      image: diameter/rtorrent-rutorrent:64
+      restart: always
+      ports:
+        - "8080:80"
+        - "49161:49161"
+        - "49160:49160"
+      volumes:
+      - ./config/.rtorrent:/downloads/.rtorrent
+      - ./config/.rutorrent:/downloads/.rutorrent
+      - ./input:/downloads
+  plex:
+    image: timhaak/plex
+    restart: always
+    volumes:
+      - ./config:/config:rw
+      - ./output:/data:rw
+    ports:
+      - "32400:32400"
