@@ -1,0 +1,1 @@
+0 0/2 * 1/1 * ? * ( lockfile-create /tmp/beets && ( beet imp -l /var/log/beets -q /input; lockfile-remove /tmp/beets ) )
