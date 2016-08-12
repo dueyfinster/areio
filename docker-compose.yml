@@ -1,0 +1,24 @@
+filebot:
+  image: coppit/filebot
+  restart: always
+  volumes:
+    - ./config:/config:rw
+    - ./input:/input:rw 
+    - ./output:/output:rw 
+rtorrent:
+    image: diameter/rtorrent-rutorrent:64
+    restart: always
+    ports:
+      - "8080:80"
+      - "49161:49161"
+      - "49160:49160"
+    volumes:
+    - ./input:/downloads
+plex:
+  image: timhaak/plex
+  restart: always
+  volumes:
+    - ./config:/config:rw
+    - ./output:/data:rw
+  ports:
+    - "32400:32400"
