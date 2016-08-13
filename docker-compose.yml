@@ -4,36 +4,48 @@ services:
     image: coppit/filebot
     restart: always
     volumes:
-      - ./config:/config:rw
-      - ./input:/input:rw 
-      - ./output:/output:rw
+      - ./config/filebot:/config:rw
+      - ./downloads/complete:/input:rw 
+      - ./media:/output:rw
     links:
       - plex
-  beets:
-    build: ./src/beets
+  beet:
+    build: ./src/beet
     restart: always
     volumes:
-      - ./config:/config:rw
-      - ./input:/input:rw 
-      - ./output/Music:/output:rw 
+      - ./config/beet:/config:rw
+      - ./downloads/complete:/input:rw 
+      - ./media/Music:/output:rw 
     links:
       - plex
-  rtorrent:
-      image: diameter/rtorrent-rutorrent:64
+#  rtorrent:
+#      image: diameter/rtorrent-rutorrent:64
+#      restart: always
+#      ports:
+#        - "8080:80"
+#        - "49161:49161"
+#        - "49160:49160"
+#      volumes:
+#      - ./downloads:/downloads
+  transmission:
+      build: ./src/torrent
       restart: always
       ports:
-        - "8080:80"
-        - "49161:49161"
-        - "49160:49160"
+        - "9091:9091"
+        - "51413:51413"
       volumes:
-      - ./config/.rtorrent:/downloads/.rtorrent
-      - ./config/.rutorrent:/downloads/.rutorrent
-      - ./input:/downloads
+        - ./config/transmission:/config
+        - ./downloads:/downloads
+        - ./watch:/watch
+      environment:
+        - PUID=501
+        - PGID=20
+        - TZ="Europe/Dublin"
   plex:
-    image: timhaak/plex
+    image: timhaak/plexpass
     restart: always
     volumes:
-      - ./config:/config:rw
-      - ./output:/data:rw
+      - ./config/plex:/config:rw
+      - ./media:/data:rw
     ports:
       - "32400:32400"
