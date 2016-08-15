@@ -10,14 +10,19 @@ services:
     links:
       - plex
   beet:
-    build: ./src/beet
+    image: linuxserver/beets
     restart: always
     volumes:
       - ./config/beet:/config:rw
-      - ./downloads/complete:/input:rw 
-      - ./media/Music:/output:rw 
+      - ./downloads/complete:/downloads:rw 
+      - ./media/Music:/music:rw 
     links:
       - plex
+    ports:
+      - "8337:8337"
+    environment:
+        - PUID=501
+        - PGID=20
 #  rtorrent:
 #      image: diameter/rtorrent-rutorrent:64
 #      restart: always
@@ -49,3 +54,5 @@ services:
       - ./media:/data:rw
     ports:
       - "32400:32400"
+      - "33400:33400"
+      - "33433:33433"
